@@ -1,0 +1,35 @@
+local textbox = script.Parent.main
+local textButton = script.Parent.add
+local event = game.ReplicatedStorage.Accessories:WaitForChild("SendInfo")
+local Tbx = script.Parent.texturesbox
+
+-- moding
+local mode = "Hat"
+local PantsButton = script.Parent.pantsmode
+local ShirtsButton = script.Parent.shirtsmode
+local HatsButton = script.Parent.Hatsmode
+
+PantsButton.MouseButton1Click:Connect(function()
+	mode = "Pants"
+	print("Set mode to Pants")
+	Tbx.Visible = false
+end)
+
+ShirtsButton.MouseButton1Click:Connect(function()
+	mode = "Shirt"
+	print("Set mode to Shirt")
+	Tbx.Visible = false
+end)
+
+HatsButton.MouseButton1Click:Connect(function()
+	mode = "Hat"
+	print("Set mode to Hat")
+	Tbx.Visible = true
+end)
+
+textButton.MouseButton1Click:Connect(function()
+	event:FireServer(textbox.Text, mode, Tbx.Text)
+	print("Sent info!")
+end)
+
+Tbx.Text = nil
