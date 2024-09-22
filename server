@@ -1,0 +1,62 @@
+local event = game.ReplicatedStorage.Accessories.SendInfo
+local insertService = game:GetService("InsertService")
+
+event.OnServerEvent:Connect(function(player, id, mode, texid)
+	local model = insertService:LoadAsset(id)
+	model.Parent = workspace
+	local asset = model:GetChildren()[1]
+	if mode == "Hat" then
+		if asset:IsA("Accessory") then
+			if texid == nil then
+				player.Character.Humanoid:AddAccessory(asset)
+				print("flood")
+			else
+				for i, descendant in asset:GetDescendants() do
+					if descendant:IsA("MeshPart") then
+						descendant.TextureID = "rbxassetid://" ..texid
+						
+					elseif descendant:IsA("Part") then
+						local dmesh = descendant:FindFirstChildOfClass("SpecialMesh")
+						dmesh.TextureId = "rbxassetid://" ..texid
+					else
+						error("oh noes")
+					end
+				end
+				print("boat")
+			end
+		end
+	elseif mode == "Shirt" then
+		if asset:IsA("Shirt") then
+			if player.Character:FindFirstChildWhichIsA("Shirt") then
+				player.Character:FindFirstChildWhichIsA("Shirt"):Destroy()
+			end
+			asset.Parent = player.Character
+		end
+		if asset:IsA("Decal") then
+			if player.Character:FindFirstChildWhichIsA("Shirt") then
+				local shirt = player.Character:FindFirstChildWhichIsA("Shirt")
+				shirt.ShirtTemplate = asset.Texture
+			else
+				local shirt = Instance.new("Shirt", player.Character)
+				shirt.ShirtTemplate = asset.Texture
+			end
+		end
+	elseif mode == "Pants" then
+		if asset:IsA("Pants") then
+			if player.Character:FindFirstChildWhichIsA("Shirt") then
+				player.Character:FindFirstChildWhichIsA("Shirt"):Destroy()
+			end
+			asset.Parent = player.Character
+		end
+		if asset:IsA("Decal") then
+			if player.Character:FindFirstChildWhichIsA("Pants") then
+				local pants = player.Character:FindFirstChildWhichIsA("Pants")
+				pants.PantsTemplate = asset.Texture
+			else
+				local pants = Instance.new("Pants", player.Character)
+				pants.PantsTemplate = asset.Texture
+			end
+		end
+	end
+	model:Destroy()
+end)
